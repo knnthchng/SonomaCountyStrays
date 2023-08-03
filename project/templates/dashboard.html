@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pet Shelter Dashboard</title>
+    <style>
+        /* CSS for table styling */
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4b61f2;
+            color: white;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* CSS for fixing table headers */
+        .table-wrapper {
+            position: relative;
+            height: 350px;
+            overflow: auto;
+        }
+
+        .table-wrapper thead {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            color: white;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chart {
+            width: 49%;
+        }
+      
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="../static/outcome_types_chart.js"></script>
+    <script src="../static/scatter_plot.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+  <h1>Pet Adoption Dashboard</h1>
+  <form method="POST">
+    <select name="pet_type" id="pet_type">
+      {% for pet_type in pet_types %}
+      <option value="{{ pet_type }}" {% if pet_type == selected_pet_type %}selected{% endif %}>{{ pet_type }}</option>
+      {% endfor %}
+    </select>
+    <select name="primary_breed" id="primary_breed">
+      {% for primary_breed in primary_breeds %}
+      <option value="{{ primary_breed }}" {% if primary_breed == selected_primary_breed %}selected{% endif %}>{{ primary_breed }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Filter">
+  </form>
+
+  {% if data %}
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Color</th>
+          <th>Sex</th>
+          <th>Size</th>
+          <th>Date Of Birth</th>
+          <th>Impound Number</th>
+          <th>Kennel Number</th>
+          <th>Animal ID</th>
+          <th>Intake Date</th>
+          <th>Days In Shelter</th>
+          <th>Intake Type</th>
+          <th>Intake Subtype</th>
+          <th>Outcome Type</th>
+          <th>Outcome Subtype</th>
+          <th>Intake Condition</th>
+          <th>Outcome Condition</th>
+          <th>Intake Jurisdiction</th>
+          <th>Outcome Jurisdiction</th>
+          <th>Outcome Zip Code</th>
+          <th>Secondary Breed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td>{{ row[6] }}</td>
+          <td>{{ row[7] }}</td>
+          <td>{{ row[8] }}</td>
+          <td>{{ row[9] }}</td>
+          <td>{{ row[10] }}</td>
+          <td>{{ row[11] }}</td>
+          <td>{{ row[12] }}</td>
+          <td>{{ row[13] }}</td>
+          <td>{{ row[14] }}</td>
+          <td>{{ row[15] }}</td>
+          <td>{{ row[16] }}</td>
+          <td>{{ row[17] }}</td>
+          <td>{{ row[18] }}</td>
+          <td>{{ row[19] }}</td>
+          <td>{{ row[20] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  <div class="chart-container">
+    <div id="outcome-types-chart" class="chart"></div>
+    <div id="scatter-plot" class="chart"></div>
+    <div id="scatter-plot">
+      <h2 id="scatter-plot-title">Scatter Plot Title</h2>
+  </div>
+  <script>
+    window.outcomeTypesDistribution = {{ outcome_types_distribution | tojson }};
+    window.scatterPlotData = {{ scatter_plot_data | tojson | safe }};
+
+    // Add event listeners to the pet type and primary breed dropdown menus
+    document.getElementById("pet_type").addEventListener("change", function() {
+        updateScatterPlot();
+    });
+
+    document.getElementById("primary_breed").addEventListener("change", function() {
+        updateScatterPlot();
+    });
+
+    // Define function to update the scatter plot with new data based on the selected pet type and primary breed
+    function updateScatterPlot() {
+        const pet_type = document.getElementById("pet_type").value;
+        const primary_breed = document.getElementById("primary_breed").value;
+        drawScatterPlot(pet_type, primary_breed, scatterPlotData);
+    }
+
+    // Update the scatter plot with the default data when the page loads
+    updateScatterPlot();
+  </script>
+</body>
+</html>

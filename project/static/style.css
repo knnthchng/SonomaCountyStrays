@@ -1,0 +1,62 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid rgb(255, 255, 255);
+  margin-top: 20px;
+}
+
+td, th {
+  border: 1px solid black;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  position: sticky;
+  top: 10;
+  background-color: rgb(0, 76, 176);
+  z-index: 0;
+  border-right: 1px solid #040404;
+  text-align: center;
+  height: 20px;
+}
+
+tr:hover {
+  background-color: #ffffff;
+}
+
+td {
+  border-right: 1px solid #ddd;
+  white-space: nowrap; /* Prevent the table cells from wrapping */
+}
+
+#outcome-types-chart {
+  float: left;
+  width: 70%;
+  height: 500px;
+}
+
+#scatter-plot {
+  float: right;
+  width: 70%;
+  height: 500px;
+  margin-top: 90px;
+}
+
+h1 {
+  text-align: center;
+  font-weight: bold;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+}
+
+#scatter-plot-title {
+  font-weight: bold;
+}
